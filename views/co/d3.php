@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+
+<?php
+ $cs = Yii::app()->getClientScript();
+  $cs->registerScriptFile(Yii::app()->request->baseUrl. '/plugins/d3/d3.v4.min.js' );
+?>
+
 <style>
 
 .links line {
@@ -56,25 +62,24 @@ if( !empty( @$link ) )
 </div>
 
 <svg id="graph" width="600" height="600"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
 function runScript(e) {
     if (e.keyCode == 13) {
         s = document.getElementById("search").value;
         if (s.indexOf("#") == 0 )
-            open("graph/search/tag/"+s.substring(1) );
+            open("graph/co/search/tag/"+s.substring(1) );
         else if (s.indexOf(">") == 0 )
-            open("graph/search/type/"+s.substring(1) ) ;
+            open("graph/co/search/type/"+s.substring(1) ) ;
         else
-            open("graph/search/q/"+s );
+            open("graph/co/search/q/"+s );
     }
 }
 function open (url) { 
     if(typeof $ != "undefined")
-        smallMenu.openAjaxHTML( baseUrl+'/'+moduleId+"/"+url);
+        smallMenu.openAjaxHTML( baseUrl+'/'+url);
     else 
-        window.location.href = "/ph/co2/"+url;   
+        window.location.href = "/ph/"+url;   
 }
 //create somewhere to put the force directed graph
 var svg = d3.select("svg"),
@@ -289,14 +294,14 @@ function selectNode(selectedNode) {
 
         links_data.forEach(function (t) {
         if (t.source.id == selectedNode.id) 
-            document.getElementById("sectionList").innerHTML += "<a href='/ph/co2/graph/d3/id/"+t.target.id+"/type/"+t.target.type+"'> "+t.target.label+"</a><br/>";
+            document.getElementById("sectionList").innerHTML += "<a href='/ph/co2/graph/co/d3/id/"+t.target.id+"/type/"+t.target.type+"'> "+t.target.label+"</a><br/>";
         })
         document.getElementById("sectionList").innerHTML += "<br/><br/>"
     }
     else if(selectedNode.id.length > 20 )
-        open( "graph/d3/id/"+selectedNode.id+"/type/"+types[selectedNode.group-1] );
+        open( "graph/co/d3/id/"+selectedNode.id+"/type/"+types[selectedNode.group-1] );
     else if (selectedNode.type == "tag")
-        open( "graph/search/tag/"+selectedNode.label );
+        open( "graph/co/search/tag/"+selectedNode.label );
 }
 
 if(typeof $ != "undefined")
@@ -306,7 +311,7 @@ else
 
 tags.forEach(function (t) {
     if (t != "") {
-            document.getElementById("graphtags").innerHTML = document.getElementById("graphtags").innerHTML+ "<a href=\"javascript:open('graph/search/tag/"+t+"')\">#"+t+"</a><br/>";
+            document.getElementById("graphtags").innerHTML = document.getElementById("graphtags").innerHTML+ "<a href=\"javascript:open('graph/co/search/tag/"+t+"')\">#"+t+"</a><br/>";
     }
   })
 
