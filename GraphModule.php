@@ -31,10 +31,18 @@ class GraphModule extends CWebModule {
         else 
 			Yii::app()->language = (isset(Yii::app()->session["lang"])) ? Yii::app()->session["lang"] : 'fr';
 
+		Yii::app()->params["module"] = array(
+			"parent" => "co2",
+			"overwriteList" => array(
+				"views" => array(),
+				"assets" => array(),
+				"controllers" => array(),
+			));
+
 		$this->setImport(array(
 			'citizenToolKit.models.*',
-			'co2.models.*',
-			'co2.components.*',
+			Yii::app()->params["module"]["parent"].'.models.*',
+			Yii::app()->params["module"]["parent"].'.components.*',
 			$this->id.'.models.*',
 			$this->id.'.components.*',
 			$this->id.'.messages.*',

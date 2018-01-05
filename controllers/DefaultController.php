@@ -9,7 +9,12 @@
  */
 class DefaultController extends CommunecterController {
 
-    
+  public $version = "v0.1.0";
+  public $versionDate = "05/01/2018";
+  public $keywords = "graph, diagram, d3, CO, communecter";
+  public $description = "any graphs generated for CO or ph::ontology driven Apps ";
+  public $pageTitle = "Graph for CO";
+
   protected function beforeAction($action)
 	{
     //parent::initPage();
