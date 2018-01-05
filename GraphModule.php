@@ -30,6 +30,15 @@ class GraphModule extends CWebModule {
         	Yii::app()->language = (string)Yii::app()->request->cookies['lang'];
         else 
 			Yii::app()->language = (isset(Yii::app()->session["lang"])) ? Yii::app()->session["lang"] : 'fr';
+
+		$this->setImport(array(
+			'citizenToolKit.models.*',
+			'co2.models.*',
+			'co2.components.*',
+			$this->id.'.models.*',
+			$this->id.'.components.*',
+			$this->id.'.messages.*',
+		));
 	}
 
 	public function beforeControllerAction($controller, $action)

@@ -7,7 +7,7 @@
  * @author: Tibor Katelbach <tibor@pixelhumain.com>
  * Date: 14/03/2014
  */
-class CoController extends Controller {
+class CoController extends CommunecterController {
 
 
     protected function beforeAction($action) {

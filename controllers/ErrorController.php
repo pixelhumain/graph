@@ -7,7 +7,7 @@
  * @author: Tibor Katelbach <tibor@pixelhumain.com>
  * Date: 18/07/2014
  */
-class ErrorController extends Controller {
+class ErrorController extends CommunecterController {
 
   protected function beforeAction($action)
 	{
