@@ -12,21 +12,23 @@ Any graphs generated for CO or ph::ontology driven Apps
 - [search a word](http://127.0.0.1/ph/graph/co/search/q/open)
 - [search a type](http://127.0.0.1/ph/graph/co/search/type/organization)
 
+#### structured Menu
+- [Menu](http://127.0.0.1/ph/graph/co/menu/type/home)
+
 ### Homepage
 /graph shows the Readme.md content information
 
 ## TODO
-- /graph 
-    + show Readme MD text as home page 
-- /graph/co/d3
-    + add avatar
 - test loading it with CO2 theme
 - load module configs from /config into moduleClass
-
+- menu system
 
 ## Ideas, proposals; wishList
 - rebuild geo statistics graphs
 - utiliser le fichier config de network
+- /graph/co/d3
+    + add avatar
+
 
 ## BUGS
 - CO favicon on /graph

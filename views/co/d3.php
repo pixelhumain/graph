@@ -294,7 +294,7 @@ function selectNode(selectedNode) {
 
         links_data.forEach(function (t) {
         if (t.source.id == selectedNode.id) 
-            document.getElementById("sectionList").innerHTML += "<a href='/ph/co2/graph/co/d3/id/"+t.target.id+"/type/"+t.target.type+"'> "+t.target.label+"</a><br/>";
+            document.getElementById("sectionList").innerHTML += "<a href='/ph/graph/co/d3/id/"+t.target.id+"/type/"+t.target.type+"'> "+t.target.label+"</a><br/>";
         })
         document.getElementById("sectionList").innerHTML += "<br/><br/>"
     }

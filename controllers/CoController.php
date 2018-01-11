@@ -18,10 +18,11 @@ class CoController extends CommunecterController {
   	public function actions()
 	{
 	    return array(
-	        'getdata'  => 'citizenToolKit.controllers.graph.GetDataAction',
-	        'viewer'   => 'citizenToolKit.controllers.graph.ViewerAction',
-	        'd3'  	   => 'citizenToolKit.controllers.graph.D3Action',
-	        'search'   => 'citizenToolKit.controllers.graph.SearchAction'
+	        'getdata'  => 'graph.controllers.GetDataAction',
+	        'viewer'   => 'graph.controllers.ViewerAction',
+	        'd3'  	   => 'graph.controllers.D3Action',
+	        'search'   => 'graph.controllers.SearchAction',
+	        'menu'   => 'graph.controllers.MenuAction'
 	    );
 	}
 }
