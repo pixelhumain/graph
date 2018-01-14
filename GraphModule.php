@@ -56,7 +56,9 @@ class GraphModule extends CWebModule {
 			"parent" => "co2",
 			"overwriteList" => array(
 				"views" => array(),
-				"assets" => array(),
+				"assets" => array(
+					"js" => ""
+				),
 				"controllers" => array(),
 			));
 
