@@ -79,12 +79,16 @@ function open (url) {
     if(typeof $ != "undefined")
         smallMenu.openAjaxHTML( baseUrl+'/'+url);
     else
+    // REMETTRE "/ph/"+url; en prod
         window.location.href = "/ph/"+url;
 }
 //create somewhere to put the force directed graph
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
+
+//add zoom capabilities
+svg.call(d3.zoom().on("zoom", zoom_actions))
 
 var radius = 15;
 
@@ -118,7 +122,7 @@ simulation.on("tick", tickActions );
 
 //add encompassing group for the zoom
 var svg_g = svg.append("g")
-    .attr("class", "everything");
+    .attr("class", "everything")
 
 //draw lines for the links
 var svg_g_g = svg_g.append("g")
@@ -138,40 +142,32 @@ var svg_g_g = svg_g.append("g")
         .data(nodes_data)
         .enter()
 
-//var svg_g_g_data_nodes_enter = svg_g_data_nodes.enter()
-
 var svg_g_g_circle = svg_g_g.append("circle")
         .attr("r", circleSize)
         .attr("fill", circleColour)
         .on('click', selectNode)
+        //add drag capabilities on circle
+        .call(d3.drag()
+        	.on("start", drag_start)
+        	.on("drag", drag_drag)
+        	.on("end", drag_end))
 
 var svg_g_g_image = svg_g_g.append("image")
       .attr("xlink:href", "https://github.com/favicon.ico")
-      //.attr("xlink:href", "eye.png")
       .attr("width", 16)
       .attr("height", 16)
       .on('click', selectNode)
+      //add drag capabilities on image
+      .call(d3.drag()
+        .on("start", drag_start)
+        .on("drag", drag_drag)
+        .on("end", drag_end))
 
 var svg_g_g_text = svg_g_g.append('text')
         .text(function (node) { return node.label })
         .attr('font-size', 20)
         .attr('dx', 15)
         .attr('dy', 4)
-
-//add drag capabilities
-var drag_handler = d3.drag()
-	.on("start", drag_start)
-	.on("drag", drag_drag)
-	.on("end", drag_end);
-
-drag_handler(svg_g_g_circle);
-
-
-//add zoom capabilities
-var zoom_handler = d3.zoom()
-    .on("zoom", zoom_actions);
-
-zoom_handler(svg);
 
 /** Functions **/
 
