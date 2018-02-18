@@ -48,6 +48,7 @@
 }
 </style>
 <div id='title'>
+
 <?php
 $l = $title;
 if( !empty( @$link ) )
@@ -62,6 +63,7 @@ if( !empty( @$link ) )
 </div>
 
 <svg id="graph" width="600" height="600"></svg>
+
 <script>
 
 function runScript(e) {
@@ -95,6 +97,7 @@ var image_default = "https://github.com/favicon.ico";
 
 console.log(<?php echo json_encode($data); ?>);
 console.log(<?php echo json_encode(@$list); ?>);
+console.log(<?php echo json_encode($links); ?>);
 var tags = <?php echo json_encode($tags); ?>;
 var nodes_data = <?php echo json_encode($data); ?>;
 var links_data = <?php echo json_encode($links); ?>;

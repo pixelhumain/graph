@@ -2,7 +2,7 @@
 /**
  * CoController.php
  *
- * Cocontroller always works with the PH base 
+ * Cocontroller always works with the PH base
  *
  * @author: Tibor Katelbach <tibor@pixelhumain.com>
  * Date: 14/03/2014
@@ -19,7 +19,8 @@ class CoController extends CommunecterController {
 	{
 	    return array(
 	        'getdata'  => 'graph.controllers.actions.GetDataAction',
-	        'viewer'   => 'graph.controllers.actions.ViewerAction',
+          'fluid'   => 'graph.controllers.actions.D3Action',
+          'viewer'   => 'graph.controllers.actions.ViewerAction',
 	        'd3'  	   => 'graph.controllers.actions.D3Action',
 	        'search'   => 'graph.controllers.actions.SearchAction',
 	        'menu'   => 'graph.controllers.actions.MenuAction'

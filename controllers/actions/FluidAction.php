@@ -163,10 +163,10 @@ class D3Action extends CAction
             Rest::json($data);
         else{
             if(Yii::app()->request->isAjaxRequest)
-                $controller->renderPartial('d3', $params);
+                $controller->renderPartial('viewer', $params);
             else{
                 Yii::app()->theme  = "empty";
-                $controller->render('d3', $params);
+                $controller->render('viewer', $params);
             }
         }
     }
