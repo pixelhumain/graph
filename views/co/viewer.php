@@ -1,5 +1,4 @@
 <?php
-
 $cssAnsScriptFilesTheme = array(
   '/plugins/fluidlog/js/d3.v3.min.js',
   '/plugins/fluidlog/js/mygraph.js',
@@ -19,6 +18,8 @@ HtmlHelper::registerCssAndScriptsFiles($cssAnsScriptFilesTheme, Yii::app()->requ
 <script>
 var viewerMap = <?php if(isset($viewerMap)) echo json_encode($viewerMap); ?>;
 </script>
+
+<script src="http://fluidlog.com/lesfaitsdesmots/loglink7.1/assets/fluidgraph/library/jquery-2.1.4.min.js"></script>
 
 <style>
 
@@ -129,7 +130,6 @@ var contextDataType = null;
 var contextDataId = null;
 
 jQuery(document).ready(function() {
- alert("bienvenue Yannick ici tu es !! a toi de jouer ");
   $(window).resize(function() {
 
     clearTimeout(timer);
@@ -142,9 +142,11 @@ jQuery(document).ready(function() {
   });
 
   datafile = getDataContext(viewerMap);
+  console.log("datafile = %o", datafile);
 
   if (datafile != null && typeof contextDataType != "undefined") {
     d3data = createFluidGraph(contextDataType, contextDataId, datafile)
+
     // var myGraph = new FluidGraph("#ajaxSV #chart", d3data)
     var myGraph = new FluidGraph("#chart", d3data)
 
@@ -203,7 +205,7 @@ jQuery(document).ready(function() {
 });
 
 function getDataContext(dataMap) {
-  mylog.log("getDataFile");
+  console.log("getDataFile");
   var map = null;
   if (typeof dataMap != "undefined") {
     map = dataMap;
@@ -232,12 +234,10 @@ function searchIndexOfNodeId(o, searchTerm) {
   return -1;
 }
 
-
 function createFluidGraph(type, contextId, datafile) {
-  mylog.log("createFluidGraph");
-  mylog.log("type = " + type);
-  mylog.log("contextid = " + contextId);
-  mylog.log("datafile = " + datafile);
+  console.log("createFluidGraph");
+  console.log("type = " + type);
+  console.log("contextid = " + contextId);
 
   var nodes= [];
   var edges= [];
@@ -260,6 +260,7 @@ function createFluidGraph(type, contextId, datafile) {
   };
 
   var index = 0;
+  //nodes
   $.each(datafile, function(type, obj) {
 
     if (obj["_id"])
@@ -273,29 +274,31 @@ function createFluidGraph(type, contextId, datafile) {
         obj.forEach(function(objChild, i)
         {
           nodes.push({id : index, type : typeMap[objChild.type], label : objChild.name, identifier : objChild["_id"]["$id"]})
-          mylog.log("objChild.type : " + objChild.type + " move to : " + typeMap[objChild.type]);
+          console.log("objChild.type : " + objChild.type + " move to : " + typeMap[objChild.type]);
           index++;
         });
       }
     }
   });
 
+  console.log("nodes = %o",nodes);
+
   var index = 0;
   //links
   $.each(datafile, function(type, obj) {
-    // mylog.log("Début type : " + type);
+    // console.log("Début type : " + type);
 
     if (!obj["_id"] && obj.length)
     {
       obj.forEach(function(objChild, i)
       {
-        mylog.log("Début objChild : " + objChild.name);
+        console.log("Début objChild : " + objChild.name);
 
         var linkIndex = {};
         var indexSource = searchIndexOfNodeId(nodes,objChild._id.$id)
 
         if (objChild.links)
-        { 
+        {
           $.each(objChild.links, function(linkType, linkObj)
           {
             var linkIndexTemp = [];
@@ -315,16 +318,18 @@ function createFluidGraph(type, contextId, datafile) {
               if (indexTarget != -1)
               {
                 edges.push({source : indexSource, target : indexTarget});
-                mylog.log("source = " + indexSource + " ,target = " + indexTarget + ", obj = " + objChild);
+                console.log("source = " + indexSource + " ,target = " + indexTarget + ", obj = " + objChild);
               }
             });
           });
         }
-        mylog.log("Fin objChild : " + objChild.name);
+        console.log("Fin objChild : " + objChild.name);
       });
     }
-    mylog.log("Fin type : " + type);
+    console.log("Fin type : " + type);
   });
+
+  console.log("edges = %o",edges);
 
   d3data.nodes = nodes;
   d3data.edges = edges;

@@ -48,6 +48,7 @@
 }
 </style>
 <div id='title'>
+
 <?php
 $l = $title;
 if( !empty( @$link ) )
@@ -62,6 +63,7 @@ if( !empty( @$link ) )
 </div>
 
 <svg id="graph" width="600" height="600"></svg>
+
 <script>
 
 function runScript(e) {
@@ -91,9 +93,11 @@ var svg = d3.select("svg"),
 svg.call(d3.zoom().on("zoom", zoom_actions))
 
 var radius = 15;
+var image_default = "https://github.com/favicon.ico";
 
 console.log(<?php echo json_encode($data); ?>);
 console.log(<?php echo json_encode(@$list); ?>);
+console.log(<?php echo json_encode($links); ?>);
 var tags = <?php echo json_encode($tags); ?>;
 var nodes_data = <?php echo json_encode($data); ?>;
 var links_data = <?php echo json_encode($links); ?>;
@@ -153,7 +157,13 @@ var svg_g_g_circle = svg_g_g.append("circle")
         	.on("end", drag_end))
 
 var svg_g_g_image = svg_g_g.append("image")
-      .attr("xlink:href", "https://github.com/favicon.ico")
+      .attr("xlink:href", function (d){
+      if (d.img == "undefined" || !d.img)
+        return image_default;
+      else {
+        return d.img;
+      }
+      })
       .attr("width", 16)
       .attr("height", 16)
       .on('click', selectNode)
