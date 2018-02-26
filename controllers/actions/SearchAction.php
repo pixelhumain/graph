@@ -27,7 +27,7 @@ class SearchAction extends CAction
         $icon = "";
         $link = ""; 
         if(@$tag){
-            $searchCrit["name"]= "#".$tag."+";
+            $searchCrit["searchTag"]= array($tag);
             $crit = "TAG : ".$tag;
             $icon = "<i class='fa fa-tag'></i> ";
             $link = "";
@@ -48,8 +48,8 @@ class SearchAction extends CAction
         $data = array($root);
 
         $list = Search::globalAutoComplete( $searchCrit );
-        if(isset($list)){
-        	foreach ($list as $key => $value){
+        if(isset($list) && @$list["results"]){
+        	foreach ($list["results"] as $key => $value){
                 $types = array( 
                     Organization::COLLECTION, 
                     Organization::TYPE_BUSINESS , 
@@ -124,7 +124,7 @@ class SearchAction extends CAction
             );
 
         if($view){
-            $data["crit"] = $searchCrit;
+            //$data["crit"] = $searchCrit;
             Rest::json($data);
         }
         else{

@@ -78,7 +78,7 @@ function runScript(e) {
     }
 }
 function open (url) {
-    alert(url);
+    //alert(url);
     if(typeof $ != "undefined")
         smallMenu.openAjaxHTML( baseUrl+'/'+url);
     else
