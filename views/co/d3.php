@@ -18,8 +18,9 @@
   stroke-width: 1px;
 }
 
-.graph{
-    float: right;
+#graph{
+    float: left;
+    width:600px;
 }
 #graphtags{
     padding-top: 20px;
@@ -27,6 +28,8 @@
     width:0%;
     float: left;
     height:600px;
+    width:20%;
+    
 }
 #graphtags a{
     color: #333;
@@ -44,7 +47,7 @@
     background-color: #eee;
     height:80px;
     font-size: 2em;
-    padding:5px;
+    padding:15px;
 }
 </style>
 <div id='title'>
@@ -62,7 +65,7 @@ if( !empty( @$link ) )
     <div id="sectionList"></div>
 </div>
 
-<svg id="graph" width="600" height="600"></svg>
+<svg id="graph" height="600" ></svg>
 
 <script>
 
@@ -308,9 +311,9 @@ function selectNode(selectedNode) {
 }
 
 if(typeof $ != "undefined")
-    $("#graph").css("width","100%")
+    $("#graph").css("width","78%")
 else
-    document.getElementById("graph").style.width = "100%";
+    document.getElementById("graph").style.width = "78%";
 
 tags.forEach(function (t) {
     if (t != "") {
