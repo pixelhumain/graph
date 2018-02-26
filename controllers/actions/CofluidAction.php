@@ -1,5 +1,5 @@
 <?php
-class ViewerAction extends CAction
+class CofluidAction extends CAction
 {
     public function run($id=null, $type=null,$data=null)
     {

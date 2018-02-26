@@ -85,6 +85,9 @@ function open (url) {
         window.location.href = "/ph/"+url;
 }
 //create somewhere to put the force directed graph
+
+var baseUrl = "<?php echo Yii::app()->getRequest()->getBaseUrl(true);?>";
+
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
@@ -155,6 +158,7 @@ var svg_g_g_circle = svg_g_g.append("circle")
         	.on("start", drag_start)
         	.on("drag", drag_drag)
         	.on("end", drag_end))
+
 
 var svg_g_g_image = svg_g_g.append("image")
       .attr("xlink:href", function (d){
