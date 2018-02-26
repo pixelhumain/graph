@@ -27,7 +27,7 @@ class SearchAction extends CAction
         $icon = "";
         $link = ""; 
         if(@$tag){
-            $searchCrit["searchTag"]= array($tag);
+            $searchCrit["name"]= "#".$tag."+";
             $crit = "TAG : ".$tag;
             $icon = "<i class='fa fa-tag'></i> ";
             $link = "";
@@ -50,8 +50,17 @@ class SearchAction extends CAction
         $list = Search::globalAutoComplete( $searchCrit );
         if(isset($list)){
         	foreach ($list as $key => $value){
-                $types = array(Organization::COLLECTION, Organization::TYPE_BUSINESS , Organization::TYPE_NGO, Organization::TYPE_GROUP, Organization::TYPE_GOV, Project::COLLECTION, Event::COLLECTION, Person::COLLECTION);
-                if(in_array($value['type'], $types)){    
+                $types = array( 
+                    Organization::COLLECTION, 
+                    Organization::TYPE_BUSINESS , 
+                    Organization::TYPE_NGO, 
+                    Organization::TYPE_GROUP, 
+                    Organization::TYPE_GOV, 
+                    Project::COLLECTION, 
+                    Event::COLLECTION, 
+                    Person::COLLECTION);
+
+                if( @$value['type'] && in_array( $value['type'], $types) ) {    
 
                     if(  in_array($value['type'], array( Organization::COLLECTION,Organization::TYPE_BUSINESS , Organization::TYPE_NGO, Organization::TYPE_GROUP, Organization::TYPE_GOV))  ){
 	        			if(!$hasOrga){
@@ -111,11 +120,13 @@ class SearchAction extends CAction
             'links' => $links,
             'list' => $list,
             'tags' => $tags,
-            "title" => $icon.$crit
+            "title" => $icon.$crit,
             );
 
-        if($view)
+        if($view){
+            $data["crit"] = $searchCrit;
             Rest::json($data);
+        }
         else{
             if(Yii::app()->request->isAjaxRequest)
                 $controller->renderPartial('d3', $params);

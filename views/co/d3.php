@@ -78,6 +78,7 @@ function runScript(e) {
     }
 }
 function open (url) {
+    alert(url);
     if(typeof $ != "undefined")
         smallMenu.openAjaxHTML( baseUrl+'/'+url);
     else
@@ -168,8 +169,8 @@ var svg_g_g_image = svg_g_g.append("image")
         return d.img;
       }
       })
-      .attr("width", 16)
-      .attr("height", 16)
+      .attr("width", 16 )
+      .attr("height", 16 )
       .on('click', selectNode)
       //add drag capabilities on image
       .call(d3.drag()
@@ -296,7 +297,7 @@ function selectNode(selectedNode) {
 
         links_data.forEach(function (t) {
         if (t.source.id == selectedNode.id)
-            document.getElementById("sectionList").innerHTML += "<a href='/ph/graph/co/d3/id/"+t.target.id+"/type/"+t.target.type+"'> "+t.target.label+"</a><br/>";
+            document.getElementById("sectionList").innerHTML += "<a href='javascript:open(\"graph/co/d3/id/"+t.target.id+"/type/"+t.target.type+"\")'> "+t.target.label+"</a><br/>";
         })
         document.getElementById("sectionList").innerHTML += "<br/><br/>"
     }
