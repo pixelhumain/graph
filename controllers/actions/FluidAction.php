@@ -1,5 +1,5 @@
 <?php
-class D3Action extends CAction
+class FluidAction extends CAction
 {
     public function run($id=null, $type=null,$view=null)
     {
@@ -19,7 +19,12 @@ class D3Action extends CAction
         }
 
         $item = PHDB::findOne( $itemType , array("_id"=>new MongoId($id)) );
-        $root = array( "id" => (string)$item["_id"], "group" => 0,  "label" => $item["name"], "level" => 0,"tags" => @$item["tags"] );
+        $root = array( "id" => (string)$item["_id"],
+                      "group" => 0,
+                      "label" => $item["name"],
+                      "type" => $itemType,
+                      "level" => 0,
+                      "tags" => @$item["tags"] );
 
         $data = array($root);
         $links = array();
@@ -44,14 +49,26 @@ class D3Action extends CAction
         		foreach ($value as $k => $v) {
 
                     if(strcmp($key, "memberOf") == 0 || strcmp($key, "organizer") == 0){
+
 	        			$obj = Organization::getById($k);
                         if(!@$obj["_id"] || !@$obj["name"])continue;
                         if(!$hasOrga){
-                            array_push($data, array( "id" => "orgas", "group" => 1,  "label" => "ORGANIZATIONS", "level" => 1 ) );
+                            array_push($data, array( "id" => "orgas",
+                                                    "group" => 1,
+                                                    "label" => "ORGANIZATIONS",
+                                                    "type"=>Organization::CONTROLLER,
+                                                    "level" => 1 ) );
                             array_push($links, array( "target" => "orgas", "source" => $root["id"],  "strength" => $strength ) );
                             $hasOrga = true;
                         }
-                        array_push($data, array( "id" => (string)@$obj["_id"], "group" => 2,  "label" => @$obj["name"], "level" => 2,"type"=>Organization::CONTROLLER,"tags" => @$obj["tags"], "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),"img"=>@$obj["profilThumbImageUrl"] ) );
+                        array_push($data, array( "id" => (string)@$obj["_id"],
+                                                "group" => 2,
+                                                "label" => @$obj["name"],
+                                                "level" => 2,
+                                                "type"=>Organization::CONTROLLER,
+                                                "tags" => @$obj["tags"],
+                                                "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),
+                                                "img"=>@$obj["profilThumbImageUrl"] ) );
                         array_push($links, array( "target" => (string)@$obj["_id"], "source" => "orgas",  "strength" => $strength  ) );
 
 	        		}
@@ -59,15 +76,27 @@ class D3Action extends CAction
                     else if (strcmp($key, "knows") == 0  ||
                               strcmp($key, "attendees") == 0 ||
                               strcmp($key, "contributors") == 0 ){
+
 	        			$obj = Person::getById($k);
                         if(!@$obj["_id"] || !@$obj["name"])continue;
                         $obj["type"] = "person";
                         if(!$hasKnows){
-                            array_push($data, array( "id" => "knows", "group" => 1,  "label" => "KNOWS", "level" => 1) );
+                            array_push($data, array( "id" => "knows",
+                                                    "group" => 1,
+                                                    "label" => "KNOWS",
+                                                    "type"=>Person::COLLECTION,
+                                                    "level" => 1) );
                             array_push($links, array( "target" => "knows", "source" => $root["id"],  "strength" => $strength ) );
                             $hasKnows = true;
                         }
-	        			array_push($data, array( "id" => (string)@$obj["_id"], "group" => 1,  "label" => @$obj["name"], "level" => 2,"tags" => @$obj["tags"],"type"=>Person::COLLECTION, "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),"img"=>@$obj["profilThumbImageUrl"] ) );
+	        			array_push($data, array( "id" => (string)@$obj["_id"],
+                                          "group" => 1,
+                                          "label" => @$obj["name"],
+                                          "level" => 2,
+                                          "tags" => @$obj["tags"],
+                                          "type"=>Person::COLLECTION,
+                                          "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),
+                                          "img" => @$obj["profilThumbImageUrl"] ) );
                         array_push($links, array( "target" => (string)@$obj["_id"], "source" => "knows",  "strength" => $strength ,"tags" => @$obj["tags"]) );
 	        		}
 
@@ -75,11 +104,22 @@ class D3Action extends CAction
 	        			$obj = Event::getById($k);
                         if(!@$obj["_id"] || !@$obj["name"])continue;
                         if(!$hasEvents){
-                            array_push($data, array( "id" => "events", "group" => 1,  "label" => "EVENTS", "level" => 1 ) );
+                            array_push($data, array( "id" => "events",
+                                                    "group" => 1,
+                                                    "label" => "EVENTS",
+                                                    "type"=>Event::CONTROLLER,
+                                                    "level" => 1 ) );
                             array_push($links, array( "target" => "events", "source" => $root["id"],  "strength" => $strength ) );
                             $hasEvents = true;
                         }
-	        			array_push($data, array( "id" => (string)@$obj["_id"], "group" => 4,  "label" => @$obj["name"], "level" => 2,"type"=>Event::CONTROLLER,"tags" => @$obj["tags"], "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),"img"=>@$obj["profilThumbImageUrl"] ));
+	        			array_push($data, array( "id" => (string)@$obj["_id"],
+                                        "group" => 4,
+                                        "label" => @$obj["name"],
+                                        "level" => 2,
+                                        "type"=>Event::CONTROLLER,
+                                        "tags" => @$obj["tags"],
+                                        "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),
+                                        "img"=>@$obj["profilThumbImageUrl"] ));
                         array_push($links, array( "target" => (string)@$obj["_id"], "source" => "events",  "strength" => $strength ) );
 	        		}
 
@@ -88,11 +128,22 @@ class D3Action extends CAction
                         if(!@$obj["_id"] || !@$obj["name"])continue;
                         $obj["type"] = "projects";
                         if(!$hasProjects){
-                            array_push($data, array( "id" => "projects", "group" => 1,  "label" => "PROJECTS", "level" => 1 ) );
+                            array_push($data, array( "id" => "projects",
+                                                    "group" => 1,
+                                                    "label" => "PROJECTS",
+                                                    "type"=>Project::CONTROLLER,
+                                                    "level" => 1 ) );
                             array_push($links, array( "target" => "projects", "source" => $root["id"],  "strength" => $strength ) );
                             $hasProjects = true;
                         }
-	        			array_push($data, array( "id" => (string)@$obj["_id"], "group" => 3,  "label" => @$obj["name"], "level" => 2,"type"=>Project::CONTROLLER,"tags" => @$obj["tags"], "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),"img"=>@$obj["profilThumbImageUrl"] ));
+	        			array_push($data, array( "id" => (string)@$obj["_id"],
+                                        "group" => 3,
+                                        "label" => @$obj["name"],
+                                        "level" => 2,
+                                        "type"=>Project::CONTROLLER,
+                                        "tags" => @$obj["tags"],
+                                        "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),
+                                        "img"=>@$obj["profilThumbImageUrl"] ));
                         array_push($links, array( "target" => (string)@$obj["_id"], "source" => "projects",  "strength" => $strength ) );
 	        		}
 
@@ -102,11 +153,22 @@ class D3Action extends CAction
 		        				$obj = Organization::getById($k);
                                 if(!@$obj["_id"] || !@$obj["name"])continue;
                                 if(!$hasMembersO){
-                                    array_push($data, array( "id" => "memberso", "group" => 1,  "label" => "MEMBERS org", "level" => 1 ) );
+                                    array_push($data, array( "id" => "memberso",
+                                                            "group" => 1,
+                                                            "label" => "MEMBERS org",
+                                                            "type"=>Organization::COLLECTION,
+                                                            "level" => 1 ) );
                                     array_push($links, array( "target" => "memberso", "source" => $root["id"],  "strength" => $strength ) );
                                     $hasMembersO = true;
                                 }
-		        				array_push($data, array( "id" => (string)@$obj["_id"], "group" => 2,  "label" => @$obj["name"], "level" => 2,"type"=>Organization::COLLECTION,"tags" => @$obj["tags"], "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),"img"=>@$obj["profilThumbImageUrl"] ));
+		        				array_push($data, array( "id" => (string)@$obj["_id"],
+                                            "group" => 2,
+                                            "label" => @$obj["name"],
+                                            "level" => 2,
+                                            "type"=>Organization::COLLECTION,
+                                            "tags" => @$obj["tags"],
+                                            "linkSize" => count(@$obj["links"], COUNT_RECURSIVE),
+                                            "img"=>@$obj["profilThumbImageUrl"] ));
                                 array_push($links, array( "target" => (string)@$obj["_id"], "source" => "memberso",  "strength" => $strength ) );
 
 		        			}
@@ -116,11 +178,21 @@ class D3Action extends CAction
                                 if(!@$obj["_id"] || !@$obj["name"])continue;
                                 $obj["type"] = "person";
                                 if(!$hasMembersP){
-                                    array_push($data, array( "id" => "membersp", "group" => 1,  "label" => "MEMBERS people", "level" => 1 ) );
+                                    array_push($data, array( "id" => "membersp",
+                                                            "group" => 1,
+                                                            "label" => "MEMBERS people",
+                                                            "type"=>Person::COLLECTION,
+                                                            "level" => 1 ) );
                                     array_push($links, array( "target" => "membersp", "source" => $root["id"],  "strength" => $strength ) );
                                     $hasMembersP = true;
                                 }
-		        				array_push($data, array( "id" => (string)@$obj["_id"], "group" => 1,  "label" => @$obj["name"], "level" => 2,"type"=>Person::COLLECTION,"tags" => @$obj["tags"], "linkSize" => count(@$obj["links"], COUNT_RECURSIVE) ));
+		        				array_push($data, array( "id" => (string)@$obj["_id"],
+                                            "group" => 1,
+                                            "label" => @$obj["name"],
+                                            "level" => 2,
+                                            "type"=>Person::COLLECTION,
+                                            "tags" => @$obj["tags"],
+                                            "linkSize" => count(@$obj["links"], COUNT_RECURSIVE) ));
                                 array_push($links, array( "target" => (string)@$obj["_id"], "source" => "membersp",  "strength" => $strength ) );
 		        			}
 		        		}
@@ -132,7 +204,11 @@ class D3Action extends CAction
                             if(!in_array($tag, $tags)){
                                 $tags[] = $tag;
                                 if(!$hasTags){
-                                    array_push($data, array( "id" => "tags", "group" => 1,  "label" => "TAGS", "level" => 1 ) );
+                                    array_push($data, array( "id" => "tags",
+                                                            "group" => 1,
+                                                            "label" => "TAGS",
+                                                            "type"=> "tag",
+                                                            "level" => 1 ) );
                                     array_push($links, array( "target" => "tags", "source" => $root["id"],  "strength" => $strength ) );
                                     $hasTags = true;
                                 }
@@ -156,17 +232,22 @@ class D3Action extends CAction
             "link" => $link
             );
 
+      $dataToD3 = array(
+          'nodes' => $data,
+          'edges' => $links,
+        );
+
         Yii::app()->theme  = "empty";
         Yii::app()->session["theme"] = "empty";
 
         if($view)
-            Rest::json($data);
+            Rest::json($dataToD3);
         else{
             if(Yii::app()->request->isAjaxRequest)
-                $controller->renderPartial('viewer', $params);
+                $controller->renderPartial('fluid', $params);
             else{
                 Yii::app()->theme  = "empty";
-                $controller->render('viewer', $params);
+                $controller->render('fluid', $params);
             }
         }
     }
