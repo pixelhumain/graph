@@ -100,7 +100,7 @@ var svg = d3.select("svg"),
 svg.call(d3.zoom().on("zoom", zoom_actions))
 
 var radius = 15;
-var image_default = "https://github.com/favicon.ico";
+var image_default = "";//https://github.com/favicon.ico";
 
 console.log(<?php echo json_encode($data); ?>);
 console.log(<?php echo json_encode(@$list); ?>);
@@ -299,13 +299,17 @@ function selectNode(selectedNode) {
         document.getElementById("sectionList").innerHTML = "<b>"+selectedNode.label+"</b><br/>";
 
         links_data.forEach(function (t) {
-        if (t.source.id == selectedNode.id)
+        if (t.source.id == selectedNode.id){
             document.getElementById("sectionList").innerHTML += "<a href='javascript:open(\"graph/co/d3/id/"+t.target.id+"/type/"+t.target.type+"\")'> "+t.target.label+"</a><br/>";
+        }
+
         })
         document.getElementById("sectionList").innerHTML += "<br/><br/>"
     }
-    else if(selectedNode.id.length > 20 )
+    else if(selectedNode.id.length > 20 ){
         open( "graph/co/d3/id/"+selectedNode.id+"/type/"+types[selectedNode.group-1] );
+        //alert( selectedNode.id+"/"+(selectedNode.group-1)+"/"+types[selectedNode.group-1] );
+    }
     else if (selectedNode.type == "tag")
         open( "graph/co/search/tag/"+selectedNode.label );
 }

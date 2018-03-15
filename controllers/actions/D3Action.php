@@ -40,6 +40,18 @@ class D3Action extends CAction
 
 
         if(isset($item) && isset($item["links"])){
+            if(@$item["parentId"] || @$item["organizerId"]  ){
+                if(@$item["organizerId"]){
+                    $item["parentId"] = $item["organizerId"];
+                    $item["parentType"] = $item["organizerType"];
+                }
+                array_push($data, array( "id" => "parent", "group" => 1,  "label" => "Parent", "level" => 0 ) );
+                array_push($links, array( "target" => "parent", "source" => $root["id"],  "strength" => $strength ) );
+                $parent = PHDB::findOne( $item["parentType"] , array("_id"=>new MongoId( $item["parentId"] )) );
+                $grp = array_search($item["parentType"], array("citoyens", "organizations", "projects", "events"))+1;
+                array_push($data, array( "id" => $item["parentId"], "group" => $grp,  "label" => @$parent["name"], "level" => 2,"type"=>$item["parentType"],"tags" => @$parent["tags"], "linkSize" => count(@$parent["links"], COUNT_RECURSIVE),"img"=>@$parent["profilThumbImageUrl"] ) );
+                array_push($links, array( "target" => $item["parentId"], "source" => "parent",  "strength" => $strength  ) );
+            }
         	foreach ($item["links"] as $key => $value){
         		foreach ($value as $k => $v) {
 
