@@ -74,6 +74,8 @@ function runScript(e) {
         s = document.getElementById("search").value;
         if (s.indexOf("#") == 0 )
             open("graph/co/search/tag/"+s.substring(1) );
+        else if (s.indexOf(".") == 0 )
+            open("graph/co/search/geo/"+s.substring(1) );
         else if (s.indexOf(">") == 0 )
             open("graph/co/search/type/"+s.substring(1) ) ;
         else
@@ -102,9 +104,9 @@ svg.call(d3.zoom().on("zoom", zoom_actions))
 var radius = 15;
 var image_default = "";//https://github.com/favicon.ico";
 
-console.log(<?php echo json_encode($data); ?>);
-console.log(<?php echo json_encode(@$list); ?>);
-console.log(<?php echo json_encode($links); ?>);
+console.log( "data", <?php echo json_encode($data); ?>);
+console.log( "list", <?php echo json_encode(@$list); ?>);
+console.log( "links", <?php echo json_encode($links); ?>);
 var tags = <?php echo json_encode($tags); ?>;
 var nodes_data = <?php echo json_encode($data); ?>;
 var links_data = <?php echo json_encode($links); ?>;

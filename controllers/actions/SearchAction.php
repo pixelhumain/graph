@@ -1,7 +1,7 @@
 <?php
 class SearchAction extends CAction
 {
-    public function run($q=null,$tag=null,$type=null,$view=null)
+    public function run($q=null,$tag=null,$type=null,$view=null,$geo=null)
     {
 
         if(!@$id && isset(Yii::app()->session["userId"])){
@@ -38,6 +38,13 @@ class SearchAction extends CAction
             $icon = "<i class='fa fa-search'></i> ";
             $link = "";
         }
+        else if(@$geo){
+            $searchCrit["locality"] = array(array( "type"=>"country", "countryCode" => $geo));
+            //echo "<script> alert( '".var_dump($searchCrit)."' ); </script>";
+            $crit = "GEO : ".$geo."";
+            $icon = "<i class='fa fa-map-marker'></i> ";
+            $link = "";
+        }
         else if(@$type){
             $searchCrit["searchType"]= array($type);
             $crit = "TYPE : ".$type;
@@ -47,7 +54,17 @@ class SearchAction extends CAction
         $root = array( "id" => "search", "group" => 0,  "label" => $crit, "level" => 0 );
         $data = array($root);
 
+        /*if(@$geo){
+            $persons = PHDB::find(Person::COLLECTION,$searchGeo);
+            $orgas = PHDB::find(Organization::COLLECTION,$searchGeo);
+            $events = PHDB::find(Event::COLLECTION,$searchGeo);
+            $projects = PHDB::find(Project::COLLECTION,$searchGeo);
+            $list = array( "results" => array_merge($persons,$orgas,$events,$projects));
+            var_dump($list);
+        } else
+            */
         $list = Search::globalAutoComplete( $searchCrit );
+
         if(isset($list) && @$list["results"]){
         	foreach ($list["results"] as $key => $value){
                 $types = array( 
@@ -114,7 +131,7 @@ class SearchAction extends CAction
         		}
         	}
         }
-
+        $crit .= " (".count($data).")";
         $params = array( 
             'data' => $data, 
             'links' => $links,

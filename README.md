@@ -28,7 +28,14 @@ Any graphs generated for CO or ph::ontology driven Apps
 - utiliser le fichier config de network
 - /graph/co/d3
     + add avatar
-
+- make the search work like COLANG
+    + comp.mails : open a graph to see the different kind of mail providers
+    + comp.geo : compare geographic distributioin on DB content 
+    + bar.geo : open a bar graph 
+    + map.geo : open a map graph of counts 
+- adding btns & features on viewed element 
+    + dbl click bg, select added type > fill dynform > save & reload
+    + when viewing an element add btns to add to follow , join...etc
 
 ## BUGS
 - CO favicon on /graph
