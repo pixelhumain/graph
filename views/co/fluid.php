@@ -1,20 +1,20 @@
 <?php
 $cssAnsScriptFilesTheme = array(
-  '/plugins/fluidlog/js/d3.v3.min.js',
-  '/plugins/fluidlog/js/mygraph.js',
-  '/plugins/fluidlog/js/mynodes.js',
-  '/plugins/fluidlog/js/mylinks.js',
-  '/plugins/fluidlog/js/mybackground.js',
-  '/plugins/fluidlog/js/extensionCommunecter.js',
-  '/plugins/fluidlog/js/semantic2.1.2.js',
-  '/plugins/fluidlog/css/loglink4.6.css',
-  '/plugins/fluidlog/css/semantic2.1.2.css',
+  $this->module->assetsUrl.'/plugins/fluidlog/loglink4.6/js/d3.v3.min.js',
+  $this->module->assetsUrl.'/plugins/fluidlog/loglink4.6/js/mygraph.js',
+  $this->module->assetsUrl.'/plugins/fluidlog/loglink4.6/js/mynodes.js',
+  $this->module->assetsUrl.'/plugins/fluidlog/loglink4.6/js/mylinks.js',
+  $this->module->assetsUrl.'/plugins/fluidlog/loglink4.6/js/mybackground.js',
+  $this->module->assetsUrl.'/plugins/fluidlog/loglink4.6/js/extensionCommunecter.js',
+  $this->module->assetsUrl.'/plugins/fluidlog/loglink4.6/js/semantic2.1.2.js',
+  $this->module->assetsUrl.'/plugins/fluidlog/loglink4.6/css/loglink4.6.css',
+  $this->module->assetsUrl.'/plugins/fluidlog/loglink4.6/css/semantic2.1.2.css',
 );
 
 HtmlHelper::registerCssAndScriptsFiles($cssAnsScriptFilesTheme, Yii::app()->request->baseUrl);
 ?>
 
-<script src="/plugins/fluidlog/js/jquery-2.1.4.min.js"></script>
+<script src="<?php echo $this->module->assetsUrl?>/plugins/fluidlog/loglink4.6/js/jquery-2.1.4.min.js"></script>
 
 <script>
 var baseUrl = "<?php echo Yii::app()->getRequest()->getBaseUrl(true);?>";
