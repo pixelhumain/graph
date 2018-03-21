@@ -65,7 +65,7 @@ if( !empty( @$link ) )
     <div id="sectionList"></div>
 </div>
 
-<svg id="graph" height="600" ></svg>
+<svg id="graph" height="600" width="600" ></svg>
 
 <script>
 
