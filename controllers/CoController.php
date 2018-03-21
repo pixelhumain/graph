@@ -19,7 +19,7 @@ class CoController extends CommunecterController {
 	{
 	    return array(
 	        'getdata'  => 'graph.controllers.actions.GetDataAction',
-          'fluid'   => 'graph.controllers.actions.D3Action',
+          'fluid'   => 'graph.controllers.actions.FluidAction',
           'viewer'   => 'graph.controllers.actions.ViewerAction',
 	        'd3'  	   => 'graph.controllers.actions.D3Action',
 	        'search'   => 'graph.controllers.actions.SearchAction',
