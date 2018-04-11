@@ -69,36 +69,10 @@ var baseUrl = "<?php echo Yii::app()->getRequest()->getBaseUrl(true);?>";
 	    overflow-y:scroll;
 	}
 
-	.panel_legend{
-		position: absolute;
-		top:10px;
-		left:15px;
-		background: none repeat scroll 0 0 #5f8295;
-		width: 150px;
-		border: 2px solid #5f8295;
-		color : white;
-		text-align: center;
-	}
-	p.item_panel_legend {
-	  margin-bottom: 3px;
-	}
-
-	.item_panel_legend {
-	  padding-bottom: 3px;
-	  padding-left: 15px;
-	  padding-top: 3px;
-	  text-align: left !important;
-	}
-
 	p {
 		font-family: "Lato",arial,sans-serif;
   		line-height: 1.3em;
 	  	text-align: center !important;
-	}
-
-	.rectLegend{
-		width: 20px;
-		height: 10px
 	}
 
 	.text_id{
@@ -112,18 +86,8 @@ var baseUrl = "<?php echo Yii::app()->getRequest()->getBaseUrl(true);?>";
 	   <div class="center text-extra-large text-bold padding-20"  id="titre"></div>
   </div>
 
-
-<div class="panel_legend" style="max-width: 250px;">
-	<p name"].'"="" id="item_panel_legend_'.$tag[" class="item_panel_legend">
-		<span>
-		</span></p><center><i>Legends
-		</i><center>
-
-	<p></p>
-</center></center></div>
-
 <script>
-var d3data = [];
+var d3Data = [];
 var contextDatafile = {};
 var contextDataType = null;
 var contextDataId = null;
@@ -147,7 +111,7 @@ jQuery(document).ready(function() {
     }, 200);
   });
 
-  data = {nodes : nodes_data, edges : links_data};
+  phData = {nodes : nodes_data, edges : links_data};
 
   // var data = {
   //       nodes: [
@@ -160,104 +124,83 @@ jQuery(document).ready(function() {
   //       ]
   // }
 
-  console.log("d3data = %o", d3data);
+  // var myGraph = new FluidGraph("#ajaxSV #chart", d3data)
+  d3Data = createFluidGraph(contextDataType, contextDataId, phData)
 
-  if (d3data != null) {
-    // var myGraph = new FluidGraph("#ajaxSV #chart", d3data)
-    d3data = createFluidGraph(contextDataType, contextDataId, data)
+  var myGraph = new FluidGraph("#chart", d3Data)
 
-    var myGraph = new FluidGraph("#chart", d3data)
+  myGraph.initSgvContainer("bgElement");
+  myGraph.config.force = "On";
+  myGraph.config.elastic = "Off";
+  myGraph.config.editGraphMode = false;
+  myGraph.config.editMode = false;
+  myGraph.config.linkDistance = 100;
+  myGraph.config.charge = -2000;
+  myGraph.activateForce();
+  myGraph.customNodes.displayId = true;
+  myGraph.customNodes.listType = []; //["project", "organization", "event", "person", "tag", "none"];
 
-    myGraph.initSgvContainer("bgElement");
-    myGraph.config.force = "On";
-    myGraph.config.elastic = "Off";
-    myGraph.config.editGraphMode = false;
-    myGraph.config.editMode = false;
-    myGraph.config.linkDistance = 100;
-    myGraph.config.charge = -2000;
-    myGraph.activateForce();
-    myGraph.customNodes.displayId = true;
-    myGraph.customNodes.listType = []; //["project", "organization", "event", "person", "tag", "none"];
+  var typeObj = {
+  	person : { col : "citoyens" ,ctrl : "person",titleClass : "bg-yellow",bgClass : "bgPerson",color:"yellow",icon:"user",lbh : "#person.invite",	},
+  	citoyens : { sameAs:"person" },
 
-    var typeObj = {
-    	person : { col : "citoyens" ,ctrl : "person",titleClass : "bg-yellow",bgClass : "bgPerson",color:"yellow",icon:"user",lbh : "#person.invite",	},
-    	citoyens : { sameAs:"person" },
+  	poi:{  col:"poi",ctrl:"poi",color:"green-poi", titleClass : "bg-green-poi", icon:"map-marker",
+  		subTypes:["link" ,"tool","machine","software","rh","RessourceMaterielle","RessourceFinanciere",
+  			   "ficheBlanche","geoJson","compostPickup","video","sharedLibrary","artPiece","recoveryCenter",
+  			   "trash","history","something2See","funPlace","place","streetArts","openScene","stand","parking","other" ] },
+  	organization : { col:"organizations", ctrl:"organization", icon : "group",titleClass : "bg-green",color:"green",bgClass : "bgOrga"},
+  	organizations : {sameAs:"organization"},
+  	LocalBusiness : {col:"organizations",color: "azure",icon: "industry"},
+  	NGO : {sameAs:"organization", color:"green", icon:"users"},
+  	Association : {sameAs:"organization", color:"green", icon: "group"},
+  	GovernmentOrganization : {col:"organization", color: "red",icon: "university"},
+  	Group : {	col:"organizations",color: "turq",icon: "circle-o"},
+  	event : {col:"events",ctrl:"event",icon : "calendar",titleClass : "bg-orange", color:"orange",bgClass : "bgEvent"},
+  	events : {sameAs:"event"},
+  	project : {col:"projects",ctrl:"project",	icon : "lightbulb-o",color : "purple",titleClass : "bg-purple",	bgClass : "bgProject"},
+    projects : {sameAs:"project"},
+    tag : {color:"red"},
+  };
 
-    	poi:{  col:"poi",ctrl:"poi",color:"green-poi", titleClass : "bg-green-poi", icon:"map-marker",
-    		subTypes:["link" ,"tool","machine","software","rh","RessourceMaterielle","RessourceFinanciere",
-    			   "ficheBlanche","geoJson","compostPickup","video","sharedLibrary","artPiece","recoveryCenter",
-    			   "trash","history","something2See","funPlace","place","streetArts","openScene","stand","parking","other" ] },
-    	organization : { col:"organizations", ctrl:"organization", icon : "group",titleClass : "bg-green",color:"green",bgClass : "bgOrga"},
-    	organizations : {sameAs:"organization"},
-    	LocalBusiness : {col:"organizations",color: "azure",icon: "industry"},
-    	NGO : {sameAs:"organization", color:"green", icon:"users"},
-    	Association : {sameAs:"organization", color:"green", icon: "group"},
-    	GovernmentOrganization : {col:"organization", color: "red",icon: "university"},
-    	Group : {	col:"organizations",color: "turq",icon: "circle-o"},
-    	event : {col:"events",ctrl:"event",icon : "calendar",titleClass : "bg-orange", color:"orange",bgClass : "bgEvent"},
-    	events : {sameAs:"event"},
-    	project : {col:"projects",ctrl:"project",	icon : "lightbulb-o",color : "purple",titleClass : "bg-purple",	bgClass : "bgProject"},
-      projects : {sameAs:"project"},
-      tag : {color:"red"},
-    };
-
-    myGraph.customNodes.colorType = {}
-    for (type in typeObj) {
-      if (!typeObj[type].sameAs)
-        myGraph.customNodes.colorType[type] = typeObj[type].color;
-      else {
-        myGraph.customNodes.colorType[type] = typeObj[typeObj[type].sameAs].color;
-      }
-    };
-    console.log("colorType = %o",myGraph.customNodes.colorType);
-
-    myGraph.customNodes.colorTypeRgba = {};
-    // myGraph.customNodes.colorTypeRgba = {
-    //                   "project" : "140, 90, 161", //"137,165,229"
-    //                   "organization" : "148, 192, 27", //"255,217,141",
-    //                   "event" : "255, 199, 4", //"205,249,137",
-    //                   "person" : "242,133,185",
-    //                   "tag" : "98, 12.2, 18.4",
-    //                   "none" : "87.1, 78.8, 95.3",
-    //                 };
-
-    myGraph.customNodes.imageType = {
-                      "project" : "idea",
-                      "organization" : "users",
-                      "event" : "calendar",
-                      "person" : "user",
-                      "tag" : "tag",
-                      "none" : "none",
-                    };
-
-    myGraph.customNodes.strokeColorType = {
-                      "project" : "#CCC",
-                      "organization" : "#CCC",
-                      "event" : "#CCC",
-                      "person" : "#CCC",
-                      "tag" : "#CCC",
-                      "none" : "#CCC",
-                    };
-
-    myGraph.drawGraph();
-
-    //Legend
-    var legendHtml = "<div><p></p>"
-    for (var i = 0; i < myGraph.customNodes.listType.length; i++) {
-      legendHtml += "<div><p class='item_panel_legend'><i class='fa fa-square fa-1x' style='color:"
-      + myGraph.customNodes.colorType[myGraph.customNodes.listType[i]]
-      + "'></i><span class='filter_name' style='display: inline;'>"
-      + myGraph.customNodes.listType[i] + "</span></p></div>";
+  myGraph.customNodes.colorType = {}
+  for (type in typeObj) {
+    if (!typeObj[type].sameAs)
+      myGraph.customNodes.colorType[type] = typeObj[type].color;
+    else {
+      myGraph.customNodes.colorType[type] = typeObj[typeObj[type].sameAs].color;
     }
-    legendHtml += "</div>"
+  };
+  console.log("colorType = %o",myGraph.customNodes.colorType);
 
-    $(".panel_legend").html(legendHtml);
+  myGraph.customNodes.colorTypeRgba = {};
+  // myGraph.customNodes.colorTypeRgba = {
+  //                   "project" : "140, 90, 161", //"137,165,229"
+  //                   "organization" : "148, 192, 27", //"255,217,141",
+  //                   "event" : "255, 199, 4", //"205,249,137",
+  //                   "person" : "242,133,185",
+  //                   "tag" : "98, 12.2, 18.4",
+  //                   "none" : "87.1, 78.8, 95.3",
+  //                 };
 
-  } else {
-    $("#titre").text("Pas de donnée à afficher");
-    $(".panel_legend").remove();
-  }
+  myGraph.customNodes.imageType = {
+                    "project" : "idea",
+                    "organization" : "users",
+                    "event" : "calendar",
+                    "person" : "user",
+                    "tag" : "tag",
+                    "none" : "none",
+                  };
 
+  myGraph.customNodes.strokeColorType = {
+                    "project" : "#CCC",
+                    "organization" : "#CCC",
+                    "event" : "#CCC",
+                    "person" : "#CCC",
+                    "tag" : "#CCC",
+                    "none" : "#CCC",
+                  };
+
+  myGraph.drawGraph();
 });
 
 function searchIndexOfNodeId(o, searchTerm) {
