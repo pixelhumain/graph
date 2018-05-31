@@ -1,17 +1,17 @@
 <?php
 $cssAnsScriptFilesTheme = array(
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/library/semantic2.1.2.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/library/d3.v3.min.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/app/init.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/app/mygraph.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/app/mynodes.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/app/myopenednode.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/app/myeditednode.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/app/mylinks.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/app/mybackground.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/app/convert.js',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/css/fluidgraph.css',
-  '/plugins/fluidlog/loglink7.1/assets/fluidgraph/css/semantic2.1.2.css',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/library/semantic2.1.2.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/library/d3.v3.min.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/app/init.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/app/mygraph.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/app/mynodes.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/app/myopenednode.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/app/myeditednode.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/app/mylinks.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/app/mybackground.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/app/convert.js',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/css/fluidgraph.css',
+  '/plugins/fluidlog/fludy/assets/fluidgraph/css/semantic2.1.2.css',
   '/js/extensionCommunecter.js',
 );
 
@@ -162,22 +162,65 @@ jQuery(document).ready(function() {
   var myGraph = new FluidGraph()
 
   myGraph.initSvgContainer("#chart");
+
+  // CustomNodes
   myGraph.customNodes.strokeOpacity = 1;
   myGraph.customNodes.strokeWidth = 0;
   myGraph.customNodes.widthClosed = 30;
   myGraph.customNodes.displayType = "Off";
-  myGraph.customNodes.displayId = false;
-  myGraph.config.editGraphMode = false;
+  myGraph.customNodes.displayText = "On";
+
+  // CONFIG
+  // CONFIG of the graph
   myGraph.config.force = "On";
   myGraph.config.elastic = "Off";
-  myGraph.config.editGraphMode = false;
-  myGraph.config.editMode = false;
   myGraph.config.linkDistance = 100;
   myGraph.config.charge = -2000;
+  myGraph.config.openNodeOnHover = 'off';
+
+  // CONFIG of the FLOD / option mode
+  myGraph.config.clicOnNodeAction = "options"; // options, flod
+
+  // CONFIG of Edition parameters
+  myGraph.config.editGraphMode = true;
+  myGraph.config.allowDraggingNode = true;
+  myGraph.config.allowModifyLink = false;
+  myGraph.config.allowOpenNode = true;
+  myGraph.config.editWithDoubleClick = false;
+  myGraph.config.newNodeWithDoubleClickOnBg = false;
+  myGraph.config.allowDragOnBg = false;
+
+  // CONFIG of options menu
+  myGraph.config.customOptions = {
+    edit : false,
+    center : false,
+    focusContextOn : true,
+    focusContextOff : false,
+    hypertext : true,
+    close : false,
+    delete : false,
+  }
 
   returnData = createFluidGraph(contextDataType, contextDataId, phData);
   myGraph.d3Data = {nodes : returnData.nodes, edges : returnData.edges}
   myGraph.customNodes.colorType = returnData.colorType;
+
+  myGraph.customNodes.strokeColorType = {
+                    "loglink:qui" : "#CCC",
+                    "loglink:quoi" : "#CCC",
+                    "loglink:quand" : "#CCC",
+                    "loglink:pourquoi" : "#CCC",
+                    "loglink:comment" : "#CCC",
+                  };
+
+  myGraph.customNodes.neighbourColorTypeRgba = {
+                    "loglink:qui" : "255, 255, 0", // person (FFFF00)
+                    "loglink:quoi" : "0, 128, 0", //organizations (008000)
+                    "loglink:comment" : "128, 0, 128", // Projects (800080)
+                    "loglink:quand" : "255, 165, 0", // Events (ffa500)
+                    "loglink:pourquoi" : "255, 0, 0", // tags (ff0000)
+                  };
+
   myGraph.activateForce();
   myGraph.drawGraph();
 
@@ -228,7 +271,7 @@ function createFluidGraph(type, contextId, dataToD3) {
       type = obj.type; //typeMap[obj.type];
     }
 
-    nodes.push({"@id" : index, "identifier" : obj.id, "type" : type, label : obj.label})
+    nodes.push({"@id" : index, "identifier" : obj.id, "hypertext" : baseUrl+"/#page.type."+type+".id."+obj.id, "type" : type, label : obj.label})
     index++;
   });
 
@@ -278,7 +321,7 @@ function createFluidGraph(type, contextId, dataToD3) {
 
   coFludyType = { "person" : "loglink:qui",
                 "organization" : "loglink:quoi",
-                "event" : "loglink:ou",
+                "event" : "loglink:quand",
                 "project" : "loglink:comment",
                 "tag" : "loglink:pourquoi",
                 }
