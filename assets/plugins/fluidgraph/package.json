@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jsdoc": "latest",
+    "ink-docstrap": "latest" 
+  }
+}
